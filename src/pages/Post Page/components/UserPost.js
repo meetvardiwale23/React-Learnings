@@ -3,84 +3,107 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const UserData = () => {
   const postCount = 5;
-  const [post, setPostData] = useState([]);
-  const [commentData, setCommentData] = useState([]);
+  // const [post, setPostData] = useState({post: [],comment:[]});
+  const [getPost,setPost] = useState([]);
+  const [showComment, setShowComment] = useState(false)
   const [nextPost, setNextPost] = useState([postCount]);
 
   const userID = useLocation();
   const id = userID.state.id;
 
-      
-
-  
-
   const getAllUserPost = async () => {
-    fetch(`https://jsonplaceholder.typicode.com/posts?userId=${id}`)
-      .then((response) => response.json())
-      .then((json) => setPostData(json));
+    // fetch(`https://jsonplaceholder.typicode.com/posts?userId=${id}`)
+    //   .then((response) => response.json())
+    //   .then((json) => setPostData(json));
 
-        let postURL = `https://jsonplaceholder.typicode.com/posts?userId=${id}`  
-         
-        const fetchPost = await fetch(postURL);
-        const fetchPostData = await fetchPost.json();
-        console.log("fetching Post",fetchPostData);
+    let postURL = `https://jsonplaceholder.typicode.com/posts?userId=${id}`;
 
-        let setBooleanData = fetchPostData.map((postObject)=>{
-            return{
-                ...postObject,
-                showcomment : true,
-            }
-        })
+    const fetchPost = await fetch(postURL);
+    const fetchPostData = await fetchPost.json();
 
-        setPostData(setBooleanData);
+    // let setBooleanData = fetchPostData.map((postObject) => {
+    //   return {
+    //     ...postObject,
+    //     showcomment: false,
+    //   };
+    // });
+    //const post = {post : fetchPostData,show}
+
+    setPost(fetchPostData);
   };
-  
 
   useEffect(() => {
     getAllUserPost();
   }, []);
 
   const getPostComments = async (event) => {
-
-    
-    console.log(event.currentTarget.id);
     const postID = event.currentTarget.id;
-    //console.log("post id", postID);
+    console.log("post id", postID);
 
+    let url = `https://jsonplaceholder.typicode.com/comments?postId=${postID}`;
 
-      let url =`https://jsonplaceholder.typicode.com/comments?postId=${postID}`
+    const fetchComments = await fetch(url);
+    const fetchCommentData = await fetchComments.json();
 
-      const fetchComments = await fetch(url);
-      const fetchCommentData = await fetchComments.json();
-      console.log("fetch comment data",fetchCommentData)
+    //const constComment = {CommentsData : fetchCommentDat}
+    const data = getPost.map((p)=>{
+      if(p.id == postID){
+          return {
+            ...p,showComment:!showComment,comment:fetchCommentData
+          }
+      }
+      return p
+    })
 
-      let setBooleanData = fetchCommentData.map((commentObject)=> {
-        return {
-            ...commentObject,
-            showcomment : true,
-        }
-      })
+    setPost(data)
 
-      console.log("post state",post);
+    // let setBooleanData = fet.map((commentObject) => {
+    //   return {
+    //     ...commentObject,
+    //     showcomment: true,
+    //   };
+    // });
 
-      setCommentData(setBooleanData);
-      post.map(())
-     // console.log("Boolean Comment",setBooleanData)
+    // setCommentData(setBooleanData);
+    // post.map((postcomments) => {
+    //   if (postcomments.id == postID) {
+    //     if (!postcomments.showcomment) {
+    //       const newObj = { ...postcomments, showcomment: true };
+    //       const updateMainObj = post.map((p) =>
+    //         p.id == newObj.id ? newObj : p
+    //       );
+    //       setPostData(updateMainObj);
+    //       return;
+    //     }else{
+    //       const newObj = { ...postcomments, showcomment: false };
+    //       const updateMainObj = post.map((p) =>
+    //         p.id == newObj.id ? newObj : p
+    //       );
+    //       setPostData(updateMainObj);
+    //       return;
+    //     }
+    //   }
+    // });
   };
-
-  //    console.log("comment data", commentData);
 
   const readMore = () => {
-    console.log("next post", nextPost);
     setNextPost(nextPost + postCount);
   };
+
+  console.log("posts",getPost);
 
   const navigate = useNavigate();
   const goBack = () => {
     navigate("/");
   };
+
+  const userForm = () =>{
+    navigate('/createpost');
+  }
   return (
     <>
+
+        
       <div
         style={{
           alignItems: "center",
@@ -90,9 +113,10 @@ const UserData = () => {
           padding: "50px",
         }}
       >
-        {post.slice(0, nextPost).map((posts) => (   
-          <>    
-          {console.log("posts",posts.showcomment)}
+        
+        
+        {getPost.slice(0, nextPost).map((posts) => (
+          <>
             <div
               className="userContent"
               key={posts.id}
@@ -121,44 +145,43 @@ const UserData = () => {
                 <p>{posts.body}</p>
               </div>
               <div>
-                <button id={posts.id} onClick={getPostComments}>
+                <button id={posts.id} onClick={(e)=>{setShowComment(!showComment);getPostComments(e)}}>
                   View Comments
                 </button>
               </div>
-              {posts.showcomment ? <div className="comments" key={posts.id}>
-                
-                {commentData.map(
-                    
-                  (comments) =>
-                  
-                    comments.postId == posts.id   &&  (
-                        
-                      <div
-                        className="commentsData"
-                        key={comments.id}
-                        style={{
-                          border: "2px solid gray",
-                          padding: "10px",
-                          marginTop: "3%",
-                          borderRadius: "25px",
-                          boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset'
-                        }}
-                      >
-                        <div className="userName" style={{}}>
-                          <label>
-                            <strong>user Name: </strong>
-                            {comments.name}
-                          </label>
-                          <label>
-                            {" "}
-                            <strong>Comments :</strong> {comments.body}
-                          </label>
+              {console.log({posts})}
+              {posts.showComment ? (
+                <div className="comments" key={posts.id}>
+                  {posts.comment.map(
+                    (comments) =>
+                      comments.postId == posts.id && (
+                        <div
+                          className="commentsData"
+                          key={comments.id}
+                          style={{
+                            border: "2px solid gray",
+                            padding: "10px",
+                            marginTop: "3%",
+                            borderRadius: "25px",
+                            boxShadow:
+                              "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
+                          }}
+                        >
+                          <div className="userName" style={{}}>
+                            <label>
+                              <strong>user Name: </strong>
+                              {comments.name}
+                            </label>
+                            <label>
+                              {" "}
+                              <strong>Comments :</strong> {comments.body}
+                            </label>
+                          </div>
                         </div>
-                      </div>
-                    )
-                )}
-              </div> : null}
-              
+                      )
+                  )}
+                </div>
+              ) : null} 
             </div>
           </>
         ))}
@@ -204,6 +227,24 @@ const UserData = () => {
         >
           Back
         </button>
+        
+        <button
+          onClick={userForm}
+          style={{
+            height: "45px",
+            width: "150px",
+            margintop: "4%",
+            backgroundColor: "black",
+            color: "white",
+            textAlign: "center",
+            fontSize: 18,
+            fontweight: "bolder",
+          }}
+        >
+          Create Post
+        </button>
+
+        
       </div>
     </>
   );

@@ -11,12 +11,14 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import UserData from "./pages/Post Page/components/UserPost";
+import UserForm from "./pages/Create Post/components/UserForm";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
     <Route path="/" element={<App />} />
     <Route path="userData" element={<UserData />} />
+    <Route path='createpost' element={<UserForm />} />
     </>
   )
 );

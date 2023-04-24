@@ -2,7 +2,10 @@ import React, { useState } from "react";
 
 const UserForm =  () =>{
 
-    const [counter, setCounter] = useState(0);
+   // const [counter, setCounter] = useState(0);
+
+    const [getAchiv,setAchiv] =useState([{Achievements : ""}]);
+
     const [getFormData,setFormData] = useState({
         firstname :"",
         lastname :"",
@@ -10,7 +13,7 @@ const UserForm =  () =>{
         email : "",
         dob : "",
         gender : "",
-        Achievements : ""
+
         
     }); 
 
@@ -20,42 +23,86 @@ const UserForm =  () =>{
         phoneNumber : "",
         email : "",
         dob : "",
+        achievements : [{}],
     });
 
     console.log(getFormData);
     const increment = () =>{
-        setCounter(counter  + 1);
-        console.log("counter",counter);
+      setAchiv([...getAchiv,{Achievements : ""}]);
+    }
+   
+
+    const Remove = (e) =>{
+        console.log("id:",e);
+        const removeObj = [...getAchiv];
+        removeObj.splice(e,1);
+        setAchiv(removeObj);
     }
 
-    const decrement = () =>{
-        setCounter(counter - 1);
+    const getAchivValues = (e,i) =>{
+
+        //const errorArr = [];
+        const newAchivData = [...getAchiv];
+
+        newAchivData[i][e.target.name] = e.target.value;
+
+        setAchiv(newAchivData);
+        console.log(getAchiv);
+        
+
+        for(let index = 0 ;index < newAchivData.length;index++)
+        {
+            if(!newAchivData[i].Achievements.match(/^[A-Za-z]*$/))
+            {
+                newAchivData[index].checkAcievements = "This should be in text only"
+            }else{
+                newAchivData[index].checkAcievements = ""
+            }
+        }
+        
+        // const checkAcievements = newAchivData[i].Achievements.match(/^[A-Za-z]*$/) ? " " : "should be text only for : " ;
+        // //console.log({checkAcievements},getErrors.achievements[i], {i});
+        // //setErrors({...getErrors,achievements : [{...getErrors.achievements[i],achievements:checkAcievements}]});
+
+        // setErrors({
+        //     ...getErrors,
+        //     achievements : [{...getErrors.achievements[i] , achievements : checkAcievements}]
+        // });
+
+        // console.log("errors",{...getErrors,achievements : [{...getErrors.achievements[i],achievements:checkAcievements}]});
+
     }
 
+    console.log("Achivements",getAchiv);
+    console.log("getErros",getErrors);
+
+    
     // onchange validation on name
     const getFormValues = e =>{
-        
+        console.log("getFormValues");
         const newFormData = {
             ...getFormData,
             [e.target.name]: e.target.value,
         };
         setFormData(newFormData);
 
+        
+
         //validation for the name
 
         
        
-            const checkFirstName = newFormData.firstname.match(/^[A-Za-z\s]*$/) ?  "" : "It must be letter only";
+            const checkFirstName = newFormData.firstname.match(/^[A-Za-z]*$/) ?  "" : "It must be letter only";
 
         // validation for name
-            const checkLastName = newFormData.lastname.match(/^[A-Za-z\s]*$/) ?  "" : "It must be letter only";
+            const checkLastName = newFormData.lastname.match(/^[A-Za-z]*$/) ?  "" : "It must be letter only";
 
         // validation for phone number 
-            const checkPhoneNumber = newFormData.phoneNumber.match(/^[0-9\s]{0,10}$/) ?  "" : "It should be only of 10 digits";
+            const checkPhoneNumber = newFormData.phoneNumber.match(/^[0-9]{0,10}$/) ?  "" : "It should be only of 10 digits";
             console.log("check phone number",checkPhoneNumber);
         
         // validation for email
-            const checkEmail = newFormData.email.match(/^[a-z0-9\s]+$/) ?  "" : "Email must be @gmail.com format";    
+            const checkEmail = newFormData.email.match(/^[a-z0-9]+$/) ?  "" : "Email must be @gmail.com format";    
 
         // validation for date 
             const getDate = new Date(newFormData.dob);
@@ -71,19 +118,22 @@ const UserForm =  () =>{
 
 
         console.log("get erros object ",getErrors);
-        // const checkLastName = newFormData.lastname.match(/^[a-zA-Z]+$/) ?  "" : "It must be letter only";
-        // setErrors(checkLastName)
+       
 
+       
 
-        console.log("getFormData",getFormData);
-        console.log("first name :",getFormData.firstname);
-        console.log(getFormData.firstname.match(/^[a-zA-Z]+$/) ? 
-        "": "only letters");
+     
+    }
 
+    const AchievementsValidations = () =>{
 
-        // setErrors('Erros')
-        // console.log("getErrors",getErrors);
-        //console.log("form data",newFormData);
+        
+
+    }
+
+    const submit = (e) =>{
+        e.prevenetDefault();
+        AchievementsValidations()
     }
 
   
@@ -93,8 +143,8 @@ const UserForm =  () =>{
             <div className="UserForm">
                 <h1>User Information</h1>
                 
-                <label>name : </label>
-                <input className="firstname" name="firstname" type="text" placeholder="Enter your name" value={getFormData.firstname} onChange={getFormValues}/>
+                <label>name : </label>{console.log(getErrors)}
+                <input className="firstname" name="firstname" type="text" placeholder="Enter your name" value={getFormData.firstname } onChange={getFormValues}/>
                 {getErrors.firstname ? <span style={{color:'red'}}>{getErrors.firstname}</span> : ""} 
                 <br/>      
 
@@ -134,21 +184,25 @@ const UserForm =  () =>{
                 </label>
                 <br/>
 
-                <label>Achievements</label>
-                <input  type="text" placeholder="Your Achievements" name="Achievements" value={getFormData.Achievements} onChange={getFormValues} />
+                
+                
 
                 <button onClick={increment}>+</button>
 
-                {Array.from(Array(counter)).map((id,index) =>{
-                    return (
-                    <div>
-                        <label>Achievements</label>
-                        <input key={id} id={index} type="text"placeholder="
-                        Your Achievements" name="Achievements" value={getFormData.Achievements} onChange={getFormValues} />
-                        <button onClick={decrement}>-</button>
-                    </div>
-                    )
-                })}
+                {getAchiv.map((item,i) => (
+                        <div>   
+                            <label>Achievements</label>
+                            <input type="text" id={i} placeholder="Your Achievements" name="Achievements" value={getAchiv[i].Achievements} onChange={(e) => getAchivValues(e,i)} />
+                             
+                            {
+                                !i == 0 ? <button id={i} onClick={() => Remove(i)}>Remove</button> : ""
+                            }
+                            <span>{item.checkAcievements}</span>
+                        </div>
+                        
+                ))}
+
+                <button type="submit" onClick={(e)=> submit}>Submit</button>
             </div>
             
 

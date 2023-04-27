@@ -11,6 +11,7 @@ import {
 } from "react-router-dom";
 import Landings from './pages/Landing/components/Landing';
 import TransacForm from './pages/Transaction Form/components/TransacForm';
+import Dashboard from './pages/Dashboard/components/Dashboard';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -18,6 +19,7 @@ const router = createBrowserRouter(
     <Route path="/" element={<App />} />
     <Route path="Landings" element={<Landings />} />
     <Route path='Transcform' element={<TransacForm />} />
+    <Route path="dashboard" element={<Dashboard/>}></Route>
     </>
   )
 );

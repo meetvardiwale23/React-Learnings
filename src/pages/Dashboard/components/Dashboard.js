@@ -5,6 +5,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import GroupByTable from "../../Dashboard/components/groupByTable";
+//import version2 from "../components/version 2/GroupTable"
 
 let globalFlag = 1;
 let globBoolean = true;
@@ -46,6 +47,7 @@ const Dashboard = () => {
         navigate('/Transcform')
     }
 
+   
 
 
     useEffect(()=>{
@@ -360,6 +362,7 @@ const Dashboard = () => {
               >
                 Home
               </button>
+             
               </div>
             </form>
           </div>

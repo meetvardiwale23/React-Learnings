@@ -157,6 +157,10 @@ const TransacForm = () => {
     }
   };
 
+  const version2 = ()=>{
+    navigate('/version2');
+  }
+
   const submit = (e) => {
     const validateFormValues = { ...getFormValues };
     let sendError = { ...setErrors };
@@ -251,6 +255,15 @@ const TransacForm = () => {
                 type="button"
               >
                 Home
+              </button>
+
+              <button
+                class="btn btn-outline-dark"
+                style={{ textDecoration: "none" }}
+                onClick={version2}
+                type="button"
+              >
+                version2
               </button>
               </div>
            

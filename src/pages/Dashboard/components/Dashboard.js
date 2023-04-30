@@ -277,7 +277,7 @@ const Dashboard = () => {
 
    const groupBy = (e)=>{
     
-
+    let finalData = []
 
     const selectedValue = e.target.value;
     let setGroupByDataState = groupByDataState
@@ -290,7 +290,7 @@ const Dashboard = () => {
         return a;
     },{})
     console.log("results",result);
-    let finalData = []
+    
     Object.keys(result).map((groupedData,index)=>{
         
        // console.log("keys",result[groupedData]);
@@ -298,9 +298,9 @@ const Dashboard = () => {
          
         
    })
-   //console.log("final Data",finalData);
+   console.log("final Data",finalData);
    setGroupByData(finalData)
-   //console.log("after mapping",groupByDataState);
+   console.log("after mapping",groupByDataState);
    
    }
     

@@ -18,54 +18,37 @@ export const RenderTable = ()=>{
     
     // console.log("local storage", storageData);
     // implement the states
-    maindata.map((keys)=>{
-      console.log(keys)
-})
-    maindata.filter((val)=>{
-      console.log("val",val);
-    })
+//     maindata.map((keys)=>{
+//       console.log(keys)
+// })
+    // maindata.filter((val)=>{
+    //   console.log("val",val);
+    // })
     
     const handleGroupBy = (e) =>{
-      
-      const groupName = e.target.value;
-     setGroupByTitle(e.target.value)
-
-      // pushing the data into the array
-      const a = []
-      switch(groupName){
-        case "monthYear" :
-          months.map((orgValue)=>{
-            return a.push(maindata.filter((val)=>{
-              return val[e.target.value] === orgValue
-            }))
-          })
-       
-        break;
-
-        case "fromAccount" :
-          fromAccount.map((orgValue)=>{
-            return a.push(maindata.filter((val)=>{
-              return val[e.target.value] === orgValue
-            }))
-          })
-       
-          break;
-
-        case "toAccount" : 
-         fromAccount.map((orgValue)=>{
-          return a.push(maindata.filter((val)=>{
-            return val[e.target.value] === orgValue
-          }))
-         })
      
-         break;
-
-         setOrderBy(a)
-      }
-      console.log("a",a);
-      console.log("order by", orderBy);
-
-    }
+     
+     
+      let finalData = []
+      const selectedValue = e.target.value;
+    
+    
+    const result = maindata.reduce((a,b)=>{
+        a[b[selectedValue]] = a[b[selectedValue]] || [] 
+        a[b[selectedValue]].push(b);
+        return a;
+    },{})
+    console.log("results",result);
+   
+    Object.keys(result).map((groupedData,index)=>{
+        
+       // console.log("keys",result[groupedData]);
+         finalData.push(result[groupedData])  
+   })
+   //console.log("final Data",finalData);
+         setOrderBy(finalData)
+     }
+    
 
     console.log("order by data", orderBy);
 
@@ -77,7 +60,7 @@ export const RenderTable = ()=>{
             <form className="d-flex">
             <div style={{display:"flex",justifyContent:"space-around",gap:"40px"}}>
 
-              <select  onChange={(e) => handleGroupBy(e)}>
+              <select  onChange={  handleGroupBy}>
               <option value="" disabled selected hidden>
                               Select Group BY
                             </option>
@@ -95,7 +78,18 @@ export const RenderTable = ()=>{
           </div>
         </nav>
 
-        <SingleTable data={maindata} />
+        {orderBy? orderBy.map((keyData,index)=>(
+            <div>
+                
+                <SingleTable  data={keyData} />
+            </div>
+        )): setOrderBy([])}
+
+              {orderBy.length === 0 ?  <div>
+                
+                <SingleTable  data={maindata} />
+            </div> :""} 
+        {/* <SingleTable data={maindata} />} /> */}
         </div>
     )
 }

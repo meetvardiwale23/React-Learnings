@@ -31,6 +31,8 @@ export const SingleTable = ({data})=>{
         switch(type){
             case "string" :
 
+            console.log("inside thge string");
+
             if(!(sorting.column === colName) || sorting.order === "ASC")
             {
                 cloneData.sort((a,b)=>{
@@ -59,17 +61,57 @@ export const SingleTable = ({data})=>{
                 setPropsData(data)
                 setSorting({column : colName ,order : "ASC"})
             }
-            
-             console.log("youa re the string type");
 
              break;
 
              case "number" :
                 console.log("youa are inside the numbers type");
+                if(!(sorting.column === colName) || sorting.order === "ASC")
+                {
+                    cloneData.sort((a,b)=>{
+                        return a[colName] - b[colName]
+                    })
+
+                    setPropsData(cloneData)
+                    setSorting({column : colName , order : "DSC"})
+                }else if(sorting.order === "DSC")
+                {
+                    cloneData.sort((a,b)=>{
+                        return b[colName] - a[colName]
+                    })
+
+                    setPropsData(cloneData)
+                    setSorting({column : colName,order : null})
+                }else{
+                        
+                    setPropsData(data)
+                    setSorting({column : colName , order :"ASC"})
+                }
                 break;
             
             case "date" :
                 console.log("you are inside the date function");
+
+                if(!(sorting.column == colName) || sorting.order === "ASC")
+                {
+                    cloneData.sort((a,b)=>{
+                        return  new Date(a[colName])- new Date(b[colName])
+                    })
+
+                    setPropsData(cloneData)
+                    setSorting({columnv : colName , order : "DSC"})  
+                }else if( sorting.order === "DSC")
+                {
+                    cloneData.sort((a,b)=>{
+                        return new Date(b[colName]) - new Date(a[colName])
+                    })
+
+                    setPropsData(cloneData)
+                    setSorting({column : colName , order : null})
+                }else{
+                    setPropsData(data)
+                    setSorting({column : colName , order : "ASC"})
+                }
                 break;
         }
     }
@@ -84,9 +126,9 @@ export const SingleTable = ({data})=>{
                             <th scope="col" onClick={() => handleSort("transactionType","string")}>Transaction Type</th>
                             <th scope="col" onClick={() => handleSort("fromAccount","string")}>From Account</th>
                             <th scope="col" onClick={() => handleSort("toAccount","string")}>To Account</th>
-                            <th scope="col" onClick={() => handleSort("Amount","number")}>Amount</th>
-                            <th scope="col"  >Recepit</th>
-                            <th scope="col" onclick={() => handleSort("notes","string")}>notes</th>
+                            <th scope="col" onClick={() => handleSort("amount","number")}>Amount</th>
+                            <th scope="col" >Recepit</th>
+                            <th scope="col" onClick={() => handleSort("notes","string")}>notes</th>
                             </tr>
                         </thead>
 
@@ -94,14 +136,14 @@ export const SingleTable = ({data})=>{
 
                             {propData.map((keys,index)=>(
                                   <tr key={index}>
-                                  <th name="transactionDate">{keys.transactionDate}</th>
-                                  <th name="transactionDate">{keys.montYear}</th>
-                                  <th name="transactionDate">{keys.transactionType}</th>
-                                  <th name="transactionDate">{keys.fromAccount}</th>
-                                  <th name="transactionDate">{keys.toAccount}</th>
-                                  <th name="transactionDate">{keys.ammount}</th>
-                                  <th name="transactionDate"><img src={keys.receipt} alt="images" style={{height:"100px",width:"100px"}}/></th>
-                                  <th name="transactionDate">{keys.notes}</th>
+                                  <td name="transactionDate">{keys.transactionDate}</td>
+                                  <td name="transactionDate">{keys.monthYear}</td>
+                                  <td name="transactionDate">{keys.transactionType}</td>
+                                  <td name="transactionDate">{keys.fromAccount}</td>
+                                  <td name="transactionDate">{keys.toAccount}</td>
+                                  <td name="transactionDate">{keys.amount}</td>
+                                  <td name="transactionDate"><img src={keys.receipt} alt="images" style={{height:"100px",width:"100px"}}/></td>
+                                  <td name="transactionDate">{keys.notes}</td>
                                   </tr>
                             ))}
                            

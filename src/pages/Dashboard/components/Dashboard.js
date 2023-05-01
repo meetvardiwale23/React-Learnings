@@ -30,8 +30,6 @@ const Dashboard = () => {
      
     console.log("current page",getPageNumber);
 
-    
-
     //setting the old Data from local Storage
     //const [getOldData,setOldData] = useState([])
     const oldData = JSON.parse(localStorage.getItem('FormData'));

@@ -5,6 +5,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import GroupByTable from "../../Dashboard/components/groupByTable";
+//import version2 from "../components/version 2/GroupTable"
 
 let globalFlag = 1;
 let globBoolean = true;
@@ -46,6 +47,7 @@ const Dashboard = () => {
         navigate('/Transcform')
     }
 
+   
 
 
     useEffect(()=>{
@@ -275,7 +277,7 @@ const Dashboard = () => {
 
    const groupBy = (e)=>{
     
-
+    let finalData = []
 
     const selectedValue = e.target.value;
     let setGroupByDataState = groupByDataState
@@ -288,7 +290,7 @@ const Dashboard = () => {
         return a;
     },{})
     console.log("results",result);
-    let finalData = []
+    
     Object.keys(result).map((groupedData,index)=>{
         
        // console.log("keys",result[groupedData]);
@@ -296,9 +298,9 @@ const Dashboard = () => {
          
         
    })
-   //console.log("final Data",finalData);
+   console.log("final Data",finalData);
    setGroupByData(finalData)
-   //console.log("after mapping",groupByDataState);
+   console.log("after mapping",groupByDataState);
    
    }
     
@@ -359,6 +361,7 @@ const Dashboard = () => {
               >
                 Home
               </button>
+             
               </div>
             </form>
           </div>

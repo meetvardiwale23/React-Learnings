@@ -5,7 +5,7 @@ import FileBase64 from "react-file-base64";
 import { useNavigate } from "react-router-dom";
 
 
-const months = [
+export const months = [
   "JAN 2023",
   "FEB 2023",
   "MARCH 2023",
@@ -19,9 +19,9 @@ const months = [
   "NOV 2023",
   "DEC 2023",
 ];
-const transactionTypeArr = ["Home Expense", "Personal Expense", "Income"];
+export const transactionTypeArr = ["Home Expense", "Personal Expense", "Income"];
 
-const fromAccount = [
+export const fromAccount = [
   "Personal Account",
   "Real Living",
   "My Dream Home",
@@ -30,7 +30,7 @@ const fromAccount = [
   "Big Block",
 ];
 
-const fileType = ["application/pdf", "image/jpeg", "image/png", "image/jpg"];
+export const fileType = ["application/pdf", "image/jpeg", "image/png", "image/jpg"];
 
 // eslint-disable-next-line no-unused-vars
 //let fileName = "";
@@ -157,6 +157,10 @@ const TransacForm = () => {
     }
   };
 
+  const version2 = ()=>{
+    navigate('/version2');
+  }
+
   const submit = (e) => {
     const validateFormValues = { ...getFormValues };
     let sendError = { ...setErrors };
@@ -251,6 +255,15 @@ const TransacForm = () => {
                 type="button"
               >
                 Home
+              </button>
+
+              <button
+                class="btn btn-outline-dark"
+                style={{ textDecoration: "none" }}
+                onClick={version2}
+                type="button"
+              >
+                version2
               </button>
               </div>
            

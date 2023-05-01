@@ -12,6 +12,7 @@ import {
 import Landings from './pages/Landing/components/Landing';
 import TransacForm from './pages/Transaction Form/components/TransacForm';
 import Dashboard from './pages/Dashboard/components/Dashboard';
+import { RenderTable } from './pages/Dashboard2/components/RenderTable';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,6 +21,7 @@ const router = createBrowserRouter(
     <Route path="Landings" element={<Landings />} />
     <Route path='Transcform' element={<TransacForm />} />
     <Route path="dashboard" element={<Dashboard/>}></Route>
+    <Route path="version2" element={<RenderTable/>}></Route>
     </>
   )
 );

@@ -2,7 +2,7 @@ import React, { useState }  from "react";
 import { SingleTable } from "./SingleTable";
 
 // import all the arrays 
-import { months,transactionTypeArr,fromAccount } from "../../Transaction Form/components/TransacForm";
+//import { months,transactionTypeArr,fromAccount } from "../../Transaction Form/components/TransacForm";
 
 export const RenderTable = ()=>{
 

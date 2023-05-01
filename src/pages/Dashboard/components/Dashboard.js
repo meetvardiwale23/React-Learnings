@@ -303,14 +303,13 @@ const Dashboard = () => {
    }
     
 
-   const prevPage = ()=>{
-
-  
+   const prevPage = ()=>{  
     console.log("inside the prev");
      if(pageNumbers !== 1){
         setPageNumbers(pageNumbers -1)
      }
    }
+   
    const nextPage = ()=>{
         if(pageNumbers !== Math.ceil(getStateLocalStorage.length / postperPage )){
             setPageNumbers(pageNumbers + 1)

@@ -1,5 +1,7 @@
+/* eslint-disable no-restricted-globals */
 import React, { useEffect } from "react";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 // // stpes for sorting
 // make empty state for sotring the data of props
@@ -11,6 +13,9 @@ import { useState } from "react";
 // eg arr.fil(0) output will be the [0,0,0]
 
 export const SingleTable = ({ data, search }) => {
+
+  //set the naivagte varaible
+  const navigate =  useNavigate();
   const searchField = search.searchString;
 
   //show the recordes per page
@@ -138,7 +143,7 @@ export const SingleTable = ({ data, search }) => {
     // setcurrentPage(index);
   };
 
-  console.log("filtered data", filterData);
+  
   function handlerSearch() {
     const globalData = [...data];
 
@@ -173,13 +178,12 @@ export const SingleTable = ({ data, search }) => {
     }
   }
 
+  //handle search
   useEffect(() => {
     handlerSearch();
   }, [searchField]);
 
-  //handle search
 
-  // handlerSearch()
   return (
     <div>
       <table className="table">
@@ -213,27 +217,32 @@ export const SingleTable = ({ data, search }) => {
             <th scope="col" onClick={() => handleSort("notes", "string")}>
               notes
             </th>
+            <th scope="col">
+              Edit 
+            </th>
           </tr>
         </thead>
 
          <tbody>
-          {console.log({filterData,propData})}
+          
               {[...propData].slice(startpage, endpage).map((keys, index) => (
                 <tr key={index}>
-                  <th name="transactionDate">{keys.transactionDate}</th>
-                  <th name="transactionDate">{keys.monthYear}</th>
-                  <th name="transactionDate">{keys.transactionType}</th>
-                  <th name="transactionDate">{keys.fromAccount}</th>
-                  <th name="transactionDate">{keys.toAccount}</th>
-                  <th name="transactionDate">{keys.amount}</th>
-                  <th name="transactionDate">
+                  <td name="transactionDate">{keys.transactionDate}</td>
+                  <td name="transactionDate">{keys.monthYear}</td>
+                  <td name="transactionDate">{keys.transactionType}</td>
+                  <td name="transactionDate">{keys.fromAccount}</td>
+                  <td name="transactionDate">{keys.toAccount}</td>
+                  <td name="transactionDate">{keys.amount}</td>
+                  <td name="transactionDate">
                     <img
                       src={keys.receipt}
                       alt="images"
                       style={{ height: "100px", width: "100px" }}
                     />
-                  </th>
-                  <th name="transactionDate">{keys.notes}</th>
+                  </td>
+                  <td name="transactionDate">{keys.notes}</td>
+                  
+                  <td> <Link to={'/Transcform'} state = {keys.id}> <i class="fas fa-edit"></i> </Link> </td>
                 </tr>
               ))}
         </tbody>

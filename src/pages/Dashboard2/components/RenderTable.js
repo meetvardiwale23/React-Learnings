@@ -18,7 +18,7 @@ export const RenderTable = ()=>{
       searchString : ""
     }]);
 
-    //console.log("mainstate", maindata);
+    
     
     const handleGroupBy = (e) =>{
      
@@ -29,25 +29,21 @@ export const RenderTable = ()=>{
         a[b[selectedValue]].push(b);
         return a;
     },{})
-      console.log("results",result);
-
- //     console.log("final Data", finalData);
-   
      Object.keys(result).map((groupedData,index)=>{
          finalData.push(result[groupedData])  
      })
    
-         setOrderBy(finalData)
+      setOrderBy(finalData)
 }
     
-//console.log("order by array",orderBy);
+
 
   // handle search function
   const handlerSearch = (val)=>{
       setSearchData({...searchData,searchString : val.target.value})
   } 
 
-  console.log("search String", searchData);
+  
   
 
     return(

@@ -1,4 +1,4 @@
-My Blockage Date 02-05-2023 day : may
+My Blockage Date 02-05-2023 Day : Tuesday 
 1) today i got blocked in convertin upper case and lowerCase in search functionality took the help of seniors
 2) took help in useEffect for search 
  why : becauase it was not invoking function and render limit was increasing so i use the useEffect in it 
@@ -8,3 +8,7 @@ My Blockage Date 02-05-2023 day : may
  why : 1) because the data of group by was not updating in the state 
  answer :  used useffect and check the global data and was updating the state using the useEffect when the data will be changed the useEffect will be called 
  why : 2) again there was issue in maintaining pagination state in sorting it was solved by using the the useEffect and slicing was done on  the sorted data and then again stored in setProps data
+
+ Date : 03-05-2023 Day : Wednesday
+ 1) new thing when you want the length of the local storage you need to frst parse the JSON array of the object and then you can get the length
+ 2) blockgae of the day :- 1) Got stuck in 

@@ -1,8 +1,8 @@
 //Number(nm).toLocaleString("en-IN") converting it it currency
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FileBase64 from "react-file-base64";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 
 export const months = [
@@ -36,8 +36,10 @@ export const fileType = ["application/pdf", "image/jpeg", "image/png", "image/jp
 //let fileName = "";
 
 const TransacForm = () => {
+
   // state for form values
   const [getFormValues, setFormValues] = useState({
+    id : "" ,
     transactionDate: "",
     monthYear: "",
     transactionType: "",
@@ -46,7 +48,7 @@ const TransacForm = () => {
     amount: "",
     receipt: "",
     notes: "",
-  });
+    });
 
   const [getErros, setErrors] = useState({
     transactionDate: "",
@@ -60,6 +62,44 @@ const TransacForm = () => {
     checkAccounts: "",
   });
 
+ useEffect(()=>{
+    const newid = new Date().getTime()
+
+    setFormValues((formData)=>({
+      ...formData,
+      id :  newid
+    }))
+ },[])
+
+
+ // fetching edit id: and whole logic of edit
+ const {state} = useLocation();
+// console.log("on click edited id ", state);
+ 
+ function handleEdit(){
+ 
+    if(state)
+    {
+       const getData = JSON.parse(localStorage.getItem('FormData'));
+       //console.log("Edit Data",editData);
+
+       const editData = [...getData].find((EditData)=>{
+          return (EditData.id === state)
+       })
+
+     //  console.log("edited data ",editData);
+       setFormValues(editData);
+//       console.log("updated data ", getFormValues);
+    }
+
+ }
+  
+ useEffect(()=>{
+  handleEdit()  
+ },[state]) 
+
+
+
   // collecting the fomr values
   const handleValues = (e) => {
     
@@ -69,6 +109,7 @@ const TransacForm = () => {
       [e.target.name]: e.target.value,
     };
     setFormValues(storeFomValues);
+
     switch (e.target.name) {
       case "transactionDate":
         //const trnsactionDate = e.target.value
@@ -157,46 +198,59 @@ const TransacForm = () => {
     }
   };
 
+  console.log("get FormValues", getFormValues);
+
   const version2 = ()=>{
     navigate('/version2');
   }
+  
 
+  
+
+
+  
   const submit = (e) => {
 
     //check id
     const validateFormValues = { ...getFormValues };
-    let sendError = { ...setErrors };
-    let errorExist = {...getErros}
+    let sendError = { ...getErros };
+    let errorExist = {...getErros};
+
+    //console.log("get Errors", getErros);
+
 
     Object.keys(validateFormValues).map((key, index) => {
 
       if (validateFormValues[key] === "") {
        
         sendError = { ...sendError, [key]: "required*" };
+        
       }
+
       else if(validateFormValues['fromAccount'] === validateFormValues['toAccount']){
         sendError = { ...sendError, 'checkAccounts': "From account and to account can not be same" };
+        
       }else{
-        sendError = { ...sendError, [key]: "" };
+        sendError = { ...sendError, [key]: ""  , checkAccounts : ""};
       }
-
       e.preventDefault();
-
     });
-    
-  
-      setErrors(sendError);
 
-    // checking the error values and pushed data into the local storage
 
-    const checkError  = Object.values(errorExist).filter((item) => item !== "") 
+    setErrors(sendError);
+
+    const checkError  = Object.values(sendError).filter((item) => item !== "") 
+
+// if(JSON.stringify(objName) === "{}").
 
     if(checkError.length === 0){
      
-      console.log("check local ", localStorage.getItem('FormData'));
+      
       if(localStorage.getItem('FormData'))
       {
-      
+        // update the data
+        
+
         let get = JSON.parse(localStorage.getItem('FormData'));
         let addData = [...get]
         if(addData)
@@ -208,20 +262,26 @@ const TransacForm = () => {
         }
         else{
 
-  
-
           console.log("still fetching the value");
+        }
+        if(state)
+        {
+          const getWholeData = JSON.parse(localStorage.getItem('FormData'))
+          const getindex = getWholeData.findIndex((indexValue)=>{
+                  return indexValue.id === state
+                    })
+          getWholeData.splice(getindex,1,getFormValues)
+          localStorage.setItem("FormData",JSON.stringify(getWholeData))
         }
         
       }else{
-
-    
-        
         localStorage.setItem("FormData",JSON.stringify([getFormValues]));
       }
+      navigate('/version2')
     }else{
-      return;
+      e.preventDefault()
     }
+    
    
   };
   const navigate = useNavigate()
@@ -301,6 +361,7 @@ const TransacForm = () => {
                         />
                       </div>
                       <div>
+                        {console.log("get Errors insidie the div",getErros)}
                         {getErros.transactionDate ? (
                           <label style={{ color: "red" }}>
                             Date is {getErros.transactionDate}

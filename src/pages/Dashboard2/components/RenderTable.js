@@ -1,14 +1,14 @@
 import React, { useState }  from "react";
 import { SingleTable } from "./SingleTable";
+import { useNavigate } from "react-router-dom";
 
 // import all the arrays 
 //import { months,transactionTypeArr,fromAccount } from "../../Transaction Form/components/TransacForm";
 
 export const RenderTable = ()=>{
 
-    //first get the local storage data
-    
-    
+    const navigate = useNavigate();
+    //first get the local storage data    
     const storageData =  JSON.parse(localStorage.getItem('FormData'));
     
     const [maindata,setMainData] = useState(storageData)
@@ -43,7 +43,9 @@ export const RenderTable = ()=>{
       setSearchData({...searchData,searchString : val.target.value})
   } 
 
-  
+  const navigateToForm = ()=>{
+    navigate("/Transcform")
+  }
   
 
     return(
@@ -54,7 +56,9 @@ export const RenderTable = ()=>{
             <form className="d-flex">
             <div style={{display:"flex",justifyContent:"space-around",gap:"40px"}}>
 
-
+              <div>
+                <button onClick={navigateToForm}>Make Payment</button>
+              </div>
               <div>
                   <input type="text"  onChange={handlerSearch} placeholder="search"/>
               </div>

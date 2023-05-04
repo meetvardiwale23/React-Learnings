@@ -2,7 +2,7 @@
 import React from "react";
 
 const GroupByTable = ({ props }) => {
-  console.log("propos", props);
+  
   return (
     <div>
       

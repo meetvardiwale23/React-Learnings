@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const Register = () => {
-  //get the user values and store it in the state
 
+
+  const navigate = useNavigate()
+  //get the user values and store it in the state
+  
   const [userData, setUserData] = useState({
     userName: "",
     email: "",
     password: "",
+    id : "",
   });
 
   const [validation,setValidation] = useState({
@@ -14,6 +19,27 @@ export const Register = () => {
     email : "",
     password : ""
   })
+
+  const [onChangeValidations, setOnChangeValiations] =  useState({
+    userName :  "",
+    email : "",
+    password : ""
+  })
+
+
+  //set the id
+  
+
+  useEffect(() => {
+    const newid = new Date().getTime();
+
+    setUserData((formData) => ({
+      ...formData,
+      id: newid,
+    }));
+  }, []);
+
+  console.log("user Data",userData);
 
   //store all the values in state
   const handleValues = (e) => {
@@ -26,22 +52,22 @@ export const Register = () => {
 
     switch(e.target.name){
 
-        case 'uesrName' :
-         const userName = e.target.value;
-         const validUser = userName.match(/^([a-z0-9]*[a-z]){4,15}[a-z0-9]*$/i) ? "" :"The user name charcter must atleast 4 character and alpabets and digits only"
+        case 'userName' :
+        
+         const validUser = !e.target.value.match("") ? "The user name must be filled" :""
          console.log("valid user",validUser);
-         setValidation({...validation,userName : validUser})
+         setOnChangeValiations({...onChangeValidations,userName : validUser})
         break;
         
         case 'email' :
-          const email = e.target.value;
+          
           const validEmail = !e.target.value.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/) ? "It must be in @gmail format" : "";
-          setValidation({...validation,email : validEmail})
+          setOnChangeValiations({...onChangeValidations,email : validEmail})
           break;
 
         case 'password' : 
-          const validPassword = !e.target.value.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/) ? "Minimum eight characters, at least one uppercase letter, one lowercase letter and one number" : ""
-          setValidation({...validation, password : validPassword})
+          const validPassword = !e.target.value.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/) ? "Minimum eight characters, at least one uppercase letter, one lowercase letter and one number Weak Password" : ""
+          setOnChangeValiations({...onChangeValidations, password : validPassword})
          break;
 
         default:
@@ -64,12 +90,59 @@ export const Register = () => {
             sendErrors = {...sendErrors, [items] : ""}
         }
 
-        setValidation(sendErrors)   
+       
     })
-    console.log("fetching all values", fetchAllValues);
+
+    setValidation(sendErrors)   
+   
+    const onSubmitError =  Object.values(sendErrors).filter((item)=> item !== "")
+    console.log("onSubmitError", onSubmitError);
+
+    const onChangeErrors = Object.values(onChangeValidations).filter((item)=> item !== "")
+    console.log("onChangeError", onChangeErrors);
 
 
-    e.preventDefault()
+    if(onSubmitError.length === 0 && onChangeErrors.length === 0)
+    { 
+          if(localStorage.getItem("RegisterData"))
+          {
+                
+                let getData =  JSON.parse(localStorage.getItem("RegisterData"))
+                console.log("getData",getData);
+                let addData = [...getData]
+                
+               const emailExist = addData.filter((data)=>{
+                  if(data.email === userData.email)
+                  {
+                   return data.email === userData.email
+                  }
+                })
+
+                console.log("emailExist",emailExist);
+
+                if(emailExist.length > 0)
+                {
+                  alert("this email already exist")
+                  e.preventDefault()
+                }else{
+                  addData.push(userData)
+                  localStorage.setItem("RegisterData",JSON.stringify(addData)) 
+                  navigate('/login')
+                }
+                console.log("add Data",addData);
+               
+
+          }else{
+                localStorage.setItem("RegisterData",JSON.stringify([userData]))
+          }
+          e.preventDefault()
+      
+    }else{
+
+    
+
+    }
+
 
   }
 
@@ -92,10 +165,11 @@ export const Register = () => {
                         <div className="d-flex flex-row align-items-center mb-4">
                           <i className="fas fa-user fa-lg me-3 fa-fw"></i>
                           <div className="form-outline flex-fill mb-0">
-                            <label style={{color:"red"}}>{validation.userName ? validation.userName : ""}</label>
+                          <label style={{color:"red"}}>{onChangeValidations.userName ? onChangeValidations.userName : ""}</label>
+                          <label style={{color:"red"}}>{validation.userName ? validation.userName : ""}</label>
                             <input
                               type="text"
-                              name="uesrName"
+                              name="userName"
                               onBlur={handleValues}
                               id="userName"
                               className="form-control"
@@ -109,6 +183,7 @@ export const Register = () => {
                         <div className="d-flex flex-row align-items-center mb-4">
                           <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
                           <div className="form-outline flex-fill mb-0">
+                          <label style={{color:"red"}}>{onChangeValidations.email ? onChangeValidations.email : ""}</label>
                           <label style={{color:"red"}}>{validation.email ? validation.email : ""}</label>
                             <input
                               type="email"
@@ -126,6 +201,7 @@ export const Register = () => {
                         <div className="d-flex flex-row align-items-center mb-4">
                           <i className="fas fa-lock fa-lg me-3 fa-fw"></i>
                           <div className="form-outline flex-fill mb-0">
+                          <label style={{color:"red"}}>{onChangeValidations.password ? onChangeValidations.password: ""}</label>
                           <label style={{color:"red"}}>{validation.password ? validation.password : ""}</label>
                             <input
                               type="password"
